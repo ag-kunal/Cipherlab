@@ -1,0 +1,19 @@
+=== RSA Cryptosystem: Educational Demonstration ===
+p = 1009
+q = 1013
+n = p * q = 1022117
+phi(n) = (p - 1) * (q - 1) = 1020096
+Public key (n, e) = (1022117, 65537)
+Private exponent d = 832193
+
+Numeric demonstration:
+Original number: 65
+Ciphertext: 341568
+Decrypted number: 65
+Numeric test: PASS
+
+Text round-trip demonstration (each ASCII byte encrypted separately):
+Original text: Hello RSA!
+Ciphertext integers: 92944 621270 575880 575880 123508 651066 176602 520249 341568 898746
+Decrypted text: Hello RSA!
+Text test: PASS

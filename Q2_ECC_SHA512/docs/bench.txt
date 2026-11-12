@@ -1,0 +1,16 @@
+
+=== Benchmark: SHA-512 speed ===
+size_bytes,time_ms,throughput_MBps
+64,0.0007,90.54
+1024,0.0040,246.60
+16384,0.0498,313.99
+262144,0.8274,302.17
+1048576,3.1783,314.64
+16777216,50.9970,313.74
+
+=== Benchmark: ECC P-256 speed (average of 20 runs) ===
+operation,time_ms
+Scalar multiplication (kG),21.848
+ECDH shared secret,20.695
+ECDSA sign (SHA-512),22.085
+ECDSA verify (SHA-512),43.258

@@ -1,0 +1,96 @@
+######  Assignment 2: SHA-512 and ECC (NIST P-256)  ######
+
+==============================================================
+ PART A: SHA-512
+==============================================================
+
+A1. Known-answer tests (official values published by NIST)
+  [PASS] SHA-512 of empty text ""
+  [PASS] SHA-512 of "abc"
+  [PASS] SHA-512 of the 112-byte NIST message (needs 2 blocks)
+  [PASS] SHA-512 of 1,000,000 x 'a' (streaming input)
+
+A2. Example hashes (each is 128 hex characters = 512 bits)
+
+  Message : ""
+  SHA-512 : cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce
+            47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e
+
+  Message : "abc"
+  SHA-512 : ddaf35a193617abacc417349ae20413112e6fa4e89a97ea20a9eeee64b55d39a
+            2192992a274fc1a836ba3c23a3feebbd454d4423643ce80e2a9ac94fa54ca49f
+
+  Message : "Hello, World!"
+  SHA-512 : 374d794a95cdcfd8b35993185fef9ba368f160d8daf432d08ba9f1ed1e5abe6c
+            c69291e0fa2fe0006a52570ef18c19def4e617c33ce52ef0a6e5fbe318cb0387
+
+  Message : "The quick brown fox jumps over the lazy dog"
+  SHA-512 : 07e547d9586f6a73f73fbac0435ed76951218fb7d0c8d788a309d785436bbb64
+            2e93a252a954f23912547d1e8a3b5ed6e1bfd7097821233fa0538f3db854fee6
+
+A3. Avalanche effect (change just 1 bit of the input)
+  Input 1 : The quick brown fox jumps over the lazy dog
+  Input 2 : Uhe quick brown fox jumps over the lazy dog   (1 bit changed in the first letter)
+  Output bits that changed: 262 out of 512  (51.2%, ideal is about 50%)
+
+==============================================================
+ PART B: ECC (NIST P-256) mathematical checks
+==============================================================
+
+These checks prove that our point arithmetic is correct.
+
+  [PASS] Base point G lies on the curve
+  [PASS] 2G equals the official published value
+  [PASS] 2G + G gives the same point as 3 * G
+  [PASS] 3G equals the official published value
+  [PASS] n * G = point at infinity (n is the order of G)
+  [PASS] (n-1) * G equals -G
+  [PASS] P + (-P) = point at infinity
+  [PASS] (a + b) * G = a*G + b*G  for random a and b
+  [PASS] A random public key is on the curve
+
+==============================================================
+ PART C: ECDH key agreement (Alice and Bob)
+==============================================================
+
+Step 1: each person creates a key pair.
+
+  Alice private key  d_A = 3cfb6bee6635b8320ee9257632e645a84c2e9892aa8ac74e5955811671cd0de0   (secret)
+  Alice public key   Q_A = d_A * G   (shared openly)
+    x = cf6022318cba270323562a9028ce72a1540e86fd6b4d364dc60e81c8ac3c6bb0
+    y = 2456742e083d59b57ec901fdf714012b853e3f6e9461b58d951811690d19ae1e
+
+  Bob   private key  d_B = a85f77b0b2fe183f482a85e818f26db60f1805ef8bf3d66033720fe1e2dd68bc   (secret)
+  Bob   public key   Q_B = d_B * G   (shared openly)
+    x = e395431338caa8e8ba30b82df197177f51f38905cbac8da6ea25bfbb15c04ddc
+    y = c4c1835041c4221a0b27d3fef186bcb1f6ecd77e75f69e000457aa97830c2c27
+
+Step 2: they swap PUBLIC keys and each computes the shared secret.
+  Alice computes d_A * Q_B -> b31389b2e582fe7ebc289b16627e0708610f11e6f98d9634a964b8fc528fbc8f
+  Bob   computes d_B * Q_A -> b31389b2e582fe7ebc289b16627e0708610f11e6f98d9634a964b8fc528fbc8f
+
+  [PASS] Alice and Bob obtained the SAME shared secret
+
+Step 3: turn the secret into an encryption key with SHA-512.
+  256-bit key = first 64 hex characters of SHA-512(secret)
+  e11a88415f470b18e6056a4d2d8b5c4f53ccb3875b9ba3e4c6403c21fd24cde1
+
+==============================================================
+ PART D: ECDSA digital signature (hash = SHA-512)
+==============================================================
+
+Alice signs this message with her PRIVATE key:
+  "Transfer Rs. 5000 to account 1234567890"
+
+  Signature part r = 075cae3fb3d92afd1fbd770882a04cc682c91a0e5d1d9b7a34d75851c9704960
+  Signature part s = 053cbdd9af7f651ad600f896b63b29308dc597baefc53756234d38879af29624
+
+Anyone can now verify using Alice's PUBLIC key:
+  [PASS] Correct message + correct signature -> ACCEPTED
+  [PASS] Message changed after signing       -> REJECTED
+  [PASS] Checked with the wrong public key   -> REJECTED
+  [PASS] Signature altered slightly          -> REJECTED
+
+==============================================================
+ RESULT: 18 tests passed, 0 failed
+==============================================================

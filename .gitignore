@@ -1,0 +1,24 @@
+# Python environments & cache
+ui/backend/.venv/
+.venv/
+**/__pycache__/
+*.py[cod]
+
+# Frontend dependencies & build output
+ui/frontend/node_modules/
+ui/frontend/dist/
+
+# Compiled C++ binaries & object files
+ui/backend/cpp_bridge/bin/
+Q1_AES256_RSA/aes256
+Q1_AES256_RSA/rsa_demo
+Q2_ECC_SHA512/ecc_sha512
+Q2_ECC_SHA512/*.o
+
+# Local AI design tooling & editor/OS files
+.agents/
+.taste-skill/
+.impeccable/
+.DS_Store
+.env
+*.log

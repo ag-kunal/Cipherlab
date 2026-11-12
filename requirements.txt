@@ -1,0 +1,2 @@
+# Combined Python dependencies for both Q3 Quantum Attacks and the CipherLab web backend
+-r ui/backend/requirements.txt
